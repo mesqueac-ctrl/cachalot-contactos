@@ -1,0 +1,191 @@
+[
+  {
+    "id": "c-001",
+    "name": "Valentina Ríos",
+    "email": "valentina.rios@andinalogistica.co",
+    "phone": "+57 310 482 1937",
+    "company": "Andina Logística",
+    "createdAt": "2026-08-12T15:20:00.000Z",
+    "updatedAt": "2026-10-05T19:10:00.000Z",
+    "notes": [
+      {
+        "id": "n-001",
+        "body": "Llamada de seguimiento el 5 de octubre. Quiere cotización para 3 bodegas adicionales en Funza.",
+        "createdAt": "2026-10-05T19:10:00.000Z"
+      },
+      {
+        "id": "n-002",
+        "body": "Primera reunión. Interesada en el módulo de rutas; decide junto con el gerente financiero.",
+        "createdAt": "2026-09-18T14:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "c-002",
+    "name": "Andrés Felipe Mejía",
+    "email": "amejia@cafeterasierra.com",
+    "phone": "+57 315 220 4410",
+    "company": "Cafetera Sierra Nevada",
+    "createdAt": "2026-07-03T13:00:00.000Z",
+    "updatedAt": "2026-09-29T16:45:00.000Z",
+    "notes": [
+      {
+        "id": "n-003",
+        "body": "Envió el contrato firmado. Activar cuenta antes del viernes.",
+        "createdAt": "2026-09-29T16:45:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "c-003",
+    "name": "Camila Ortega",
+    "email": "camila@ortegaypardo.legal",
+    "phone": "+57 301 774 0092",
+    "company": "Ortega & Pardo Abogados",
+    "createdAt": "2026-09-01T10:30:00.000Z",
+    "updatedAt": "2026-09-01T10:30:00.000Z",
+    "notes": []
+  },
+  {
+    "id": "c-004",
+    "name": "Julián Restrepo",
+    "email": "julian.restrepo@textilesdelvalle.co",
+    "phone": "+57 318 903 5561",
+    "company": "Textiles del Valle",
+    "createdAt": "2026-06-21T09:00:00.000Z",
+    "updatedAt": "2026-10-02T21:15:00.000Z",
+    "notes": [
+      {
+        "id": "n-004",
+        "body": "Pidió aplazar la renovación hasta noviembre por cierre de trimestre.",
+        "createdAt": "2026-10-02T21:15:00.000Z"
+      },
+      {
+        "id": "n-005",
+        "body": "Demo del tablero de ventas con su equipo comercial (6 personas). Muy buena recepción.",
+        "createdAt": "2026-09-10T15:30:00.000Z"
+      },
+      {
+        "id": "n-006",
+        "body": "Referido por Andrés Mejía.",
+        "createdAt": "2026-06-21T09:05:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "c-005",
+    "name": "Daniela Gómez",
+    "email": "dgomez@clinicaaurora.com.co",
+    "phone": "+57 312 650 3384",
+    "company": "Clínica Aurora",
+    "createdAt": "2026-08-28T18:00:00.000Z",
+    "updatedAt": "2026-09-30T13:20:00.000Z",
+    "notes": [
+      {
+        "id": "n-007",
+        "body": "Solicita integración con su sistema de citas. Pasar a soporte técnico.",
+        "createdAt": "2026-09-30T13:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "c-006",
+    "name": "Santiago Herrera",
+    "email": "santiago@pixelcaribe.studio",
+    "phone": "+57 300 118 2275",
+    "company": "Pixel Caribe",
+    "createdAt": "2026-09-14T20:10:00.000Z",
+    "updatedAt": "2026-09-14T20:10:00.000Z",
+    "notes": []
+  },
+  {
+    "id": "c-007",
+    "name": "Mariana Londoño",
+    "email": "mariana.londono@andinalogistica.co",
+    "phone": "+57 314 387 9021",
+    "company": "Andina Logística",
+    "createdAt": "2026-08-12T15:40:00.000Z",
+    "updatedAt": "2026-09-22T17:00:00.000Z",
+    "notes": [
+      {
+        "id": "n-008",
+        "body": "Contacto de compras. Necesita factura electrónica con orden de compra adjunta.",
+        "createdAt": "2026-09-22T17:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "c-008",
+    "name": "Tomás Castaño",
+    "email": "tcastano@agrofrutos.co",
+    "phone": "+57 313 509 6648",
+    "company": "Agrofrutos del Quindío",
+    "createdAt": "2026-05-30T12:00:00.000Z",
+    "updatedAt": "2026-10-06T14:35:00.000Z",
+    "notes": [
+      {
+        "id": "n-009",
+        "body": "Confirmó visita a la finca el 14 de octubre para capacitar al equipo de despacho.",
+        "createdAt": "2026-10-06T14:35:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "c-009",
+    "name": "Laura Valencia",
+    "email": "laura.valencia@bancoterra.com",
+    "phone": "+57 316 742 1180",
+    "company": "Banco Terra",
+    "createdAt": "2026-04-17T16:00:00.000Z",
+    "updatedAt": "2026-09-05T15:00:00.000Z",
+    "notes": [
+      {
+        "id": "n-010",
+        "body": "Revisión de seguridad aprobada. Falta visto bueno de compras.",
+        "createdAt": "2026-09-05T15:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "c-010",
+    "name": "Esteban Duque",
+    "email": "esteban@duqueconstrucciones.com",
+    "phone": "+57 317 266 0453",
+    "company": "Duque Construcciones",
+    "createdAt": "2026-09-25T11:45:00.000Z",
+    "updatedAt": "2026-09-25T11:45:00.000Z",
+    "notes": []
+  },
+  {
+    "id": "c-011",
+    "name": "Natalia Suárez",
+    "email": "nsuarez@cafeterasierra.com",
+    "phone": "+57 311 890 7735",
+    "company": "Cafetera Sierra Nevada",
+    "createdAt": "2026-07-03T13:20:00.000Z",
+    "updatedAt": "2026-08-19T19:30:00.000Z",
+    "notes": [
+      {
+        "id": "n-011",
+        "body": "Prefiere que la contacten por correo antes de las 10 a. m.",
+        "createdAt": "2026-08-19T19:30:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "c-012",
+    "name": "Ricardo Patiño",
+    "email": "ricardo.patino@ferreteriaelpuente.co",
+    "phone": "+57 320 441 5809",
+    "company": "Ferretería El Puente",
+    "createdAt": "2026-03-08T14:10:00.000Z",
+    "updatedAt": "2026-07-30T18:00:00.000Z",
+    "notes": [
+      {
+        "id": "n-012",
+        "body": "Cliente desde marzo. Renovación anual en el mes de marzo.",
+        "createdAt": "2026-07-30T18:00:00.000Z"
+      }
+    ]
+  }
+]
