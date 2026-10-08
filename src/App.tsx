@@ -5,7 +5,7 @@ import { ContactDetail } from './pages/ContactDetail'
 import { EditContactPage } from './pages/EditContactPage'
 import { NewContactPage } from './pages/NewContactPage'
 import { NotFoundPane } from './pages/NotFoundPane'
-import { WelcomePane } from './pages/WelcomePane'
+import { OverviewPane } from './pages/OverviewPane'
 import { ContactsProvider } from './state/ContactsProvider'
 import { ToastProvider } from './state/ToastProvider'
 import './styles/components.css'
@@ -14,7 +14,8 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route index element={<WelcomePane />} />
+        <Route index element={<OverviewPane />} />
+        <Route path="resumen" element={<OverviewPane />} />
         <Route path="contactos/nuevo" element={<NewContactPage />} />
         <Route path="contactos/:id" element={<ContactDetail />} />
         <Route path="contactos/:id/editar" element={<EditContactPage />} />

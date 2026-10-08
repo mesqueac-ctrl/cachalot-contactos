@@ -1,0 +1,232 @@
+.overview {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+  max-width: 960px;
+}
+
+.overview > .back-link {
+  justify-self: start;
+  margin-bottom: calc(var(--space-3) * -1);
+}
+
+.overview__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
+}
+
+.overview__title {
+  font-size: var(--text-3xl);
+  font-weight: 650;
+}
+
+.overview__date {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Cifras principales */
+.overview__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 1100px) {
+  .overview__stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat dt {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  line-height: 1.3;
+}
+
+.stat dd {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.stat[data-tone='warn'] {
+  border-color: color-mix(in srgb, var(--amber) 45%, var(--line));
+  background: linear-gradient(var(--amber-soft), var(--surface) 70%);
+}
+
+/* Paneles */
+.panel {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 640px) {
+  .panel {
+    padding: var(--space-5);
+  }
+}
+
+.panel__title {
+  font-size: var(--text-lg);
+  font-weight: 650;
+}
+
+.panel__hint {
+  margin-top: calc(var(--space-2) * -1);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.panel__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.overview__columns {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 1100px) {
+  .overview__columns {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* Barra de distribución por estado */
+.status-bar {
+  display: flex;
+  gap: 3px;
+  height: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+.status-bar span {
+  flex-basis: 0;
+  min-width: 6px;
+  background: var(--status-dot);
+}
+
+.status-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+}
+
+.status-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.status-legend li::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--status-dot);
+}
+
+.status-legend__label {
+  font-weight: 600;
+}
+
+.status-legend__value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+/* Listas compactas */
+.mini-list {
+  display: grid;
+  margin: 0 calc(var(--space-2) * -1);
+}
+
+.mini-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  color: inherit;
+  text-decoration: none;
+}
+
+.mini-row:hover {
+  background: var(--surface-sunken);
+  color: inherit;
+}
+
+.mini-row__body {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.mini-row__title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.mini-row__meta,
+.mini-row__text {
+  overflow: hidden;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-row--activity {
+  align-items: flex-start;
+}
+
+.mini-row__time {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.mini-list__more {
+  padding: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
