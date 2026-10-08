@@ -1,7 +1,7 @@
 import seed from '../data/contacts.json'
-import type { Contact, ContactInput, Note } from '../types'
+import type { Contact, ContactInput, Note, NoteKind } from '../types'
 
-export const STORAGE_KEY = 'cachalot.contactos.v1'
+export const STORAGE_KEY = 'cachalot.contactos.v2'
 
 /**
  * Cómo se comporta la API simulada:
@@ -16,7 +16,8 @@ export interface ContactsApi {
   create(input: ContactInput): Promise<Contact>
   update(id: string, input: ContactInput): Promise<Contact>
   remove(id: string): Promise<void>
-  addNote(contactId: string, body: string): Promise<Note>
+  addNote(contactId: string, body: string, kind: NoteKind): Promise<Note>
+  removeNote(contactId: string, noteId: string): Promise<void>
 }
 
 export class ApiError extends Error {
@@ -52,7 +53,7 @@ export function createContactsApi({
       return start
     }
     try {
-      return JSON.parse(raw) as Contact[]
+      return (JSON.parse(raw) as Contact[]).map(withDefaults)
     } catch {
       throw new ApiError('Los datos guardados en este navegador están dañados.')
     }
@@ -82,6 +83,8 @@ export function createContactsApi({
       email: input.email.trim().toLowerCase(),
       phone: input.phone.trim(),
       company: input.company.trim(),
+      role: input.role.trim(),
+      status: input.status,
     }
   }
 
@@ -124,12 +127,12 @@ export function createContactsApi({
         write(contacts.filter((contact) => contact.id !== id))
       }),
 
-    addNote: (contactId, body) =>
+    addNote: (contactId, body, kind) =>
       request(() => {
         const contacts = read()
         const index = findIndex(contacts, contactId)
         const now = new Date().toISOString()
-        const note: Note = { id: crypto.randomUUID(), body: body.trim(), createdAt: now }
+        const note: Note = { id: crypto.randomUUID(), body: body.trim(), kind, createdAt: now }
         contacts[index] = {
           ...contacts[index],
           notes: [note, ...contacts[index].notes],
@@ -138,6 +141,26 @@ export function createContactsApi({
         write(contacts)
         return note
       }),
+
+    removeNote: (contactId, noteId) =>
+      request(() => {
+        const contacts = read()
+        const index = findIndex(contacts, contactId)
+        const notes = contacts[index].notes
+        if (!notes.some((n) => n.id === noteId)) throw new ApiError('Esta nota ya no existe.', 404)
+        contacts[index] = { ...contacts[index], notes: notes.filter((n) => n.id !== noteId) }
+        write(contacts)
+      }),
+  }
+}
+
+/** Completa campos que datos guardados por versiones anteriores podrían no tener. */
+function withDefaults(contact: Contact): Contact {
+  return {
+    ...contact,
+    role: contact.role ?? '',
+    status: contact.status ?? 'nuevo',
+    notes: (contact.notes ?? []).map((note) => ({ ...note, kind: note.kind ?? 'nota' })),
   }
 }
 

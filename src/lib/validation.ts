@@ -6,6 +6,7 @@ export const EMAIL_PATTERN = /^[^\s@]+@([^\s@.]+\.)+[^\s@.]{2,}$/
 const PHONE_ALLOWED = /^[\d\s()+-]+$/
 const NAME_MAX = 80
 const COMPANY_MAX = 80
+const ROLE_MAX = 60
 
 interface Options {
   /** Correos ya usados por otros contactos (en minúsculas). */
@@ -36,6 +37,9 @@ export function validateContact(input: ContactInput, { takenEmails = [] }: Optio
 
   if (company.length > COMPANY_MAX)
     errors.company = `El nombre de la empresa puede tener hasta ${COMPANY_MAX} caracteres.`
+
+  if (input.role.trim().length > ROLE_MAX)
+    errors.role = `El cargo puede tener hasta ${ROLE_MAX} caracteres.`
 
   return errors
 }

@@ -93,6 +93,19 @@
   text-decoration: underline;
 }
 
+.detail__identity .status-badge {
+  justify-self: start;
+  margin-top: var(--space-1);
+}
+
+.fact__select {
+  width: auto;
+  min-width: 200px;
+  min-height: 38px;
+  padding-right: var(--space-6);
+  cursor: pointer;
+}
+
 .fact__empty {
   color: var(--ink-muted);
   font-style: italic;

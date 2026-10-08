@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { Contact, ContactInput, Note } from '../types'
+import type { Contact, ContactInput, ContactStatus, Note, NoteKind } from '../types'
 
 export type LoadStatus = 'loading' | 'ready' | 'error'
 
@@ -11,7 +11,9 @@ export interface ContactsContextValue {
   createContact: (input: ContactInput) => Promise<Contact>
   updateContact: (id: string, input: ContactInput) => Promise<Contact>
   deleteContact: (id: string) => Promise<void>
-  addNote: (contactId: string, body: string) => Promise<Note>
+  changeStatus: (id: string, status: ContactStatus) => Promise<Contact>
+  addNote: (contactId: string, body: string, kind: NoteKind) => Promise<Note>
+  removeNote: (contactId: string, noteId: string) => Promise<void>
 }
 
 export const ContactsContext = createContext<ContactsContextValue | null>(null)

@@ -41,6 +41,8 @@ export function EditContactPage() {
         email: contact.email,
         phone: contact.phone,
         company: contact.company,
+        role: contact.role,
+        status: contact.status,
       }}
       takenEmails={contacts.filter((c) => c.id !== contact.id).map((c) => c.email.toLowerCase())}
       onSubmit={async (input) => {

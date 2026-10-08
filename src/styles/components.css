@@ -37,6 +37,37 @@
 [data-theme='dark'] .avatar[data-tone='4'] { --tone-bg: #2f3e1f; --tone-fg: #cde2ae; }
 [data-theme='dark'] .avatar[data-tone='5'] { --tone-bg: #3f2541; --tone-fg: #e7c3e9; }
 
+/* Estado comercial del contacto */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px 2px 7px;
+  border-radius: 999px;
+  background: var(--status-bg);
+  color: var(--status-fg);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.status-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+[data-status='nuevo'] { --status-bg: #e2e8f4; --status-fg: #2a4373; --status-dot: #4a6cb3; }
+[data-status='activo'] { --status-bg: var(--accent-soft); --status-fg: #08524f; --status-dot: var(--accent); }
+[data-status='seguimiento'] { --status-bg: var(--amber-soft); --status-fg: #7a4a0c; --status-dot: var(--amber); }
+
+[data-theme='dark'] [data-status='nuevo'] { --status-bg: #1d2b45; --status-fg: #b9caf0; --status-dot: #7f9be0; }
+[data-theme='dark'] [data-status='activo'] { --status-fg: #8fe0d6; }
+[data-theme='dark'] [data-status='seguimiento'] { --status-fg: #f2c98a; }
+
 /* Mensajes de estado: vacío, sin resultados, error */
 .state {
   display: grid;

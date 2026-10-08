@@ -114,6 +114,32 @@ export const IconMoon = (p: IconProps) => (
   </Icon>
 )
 
+export const IconCalendar = (p: IconProps) => (
+  <Icon {...p}>
+    <rect x="4" y="5" width="16" height="16" rx="2" />
+    <path d="M4 10h16M9 3v4M15 3v4" />
+  </Icon>
+)
+
+export const IconChart = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M4 20h16M7 16v-5M12 16V6M17 16v-8" />
+  </Icon>
+)
+
+export const IconFlag = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M5 21V4M5 4h11l-2 4 2 4H5" />
+  </Icon>
+)
+
+export const IconClock = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </Icon>
+)
+
 export const IconNote = (p: IconProps) => (
   <Icon {...p}>
     <path d="M6 3h9l4 4v14H6z" />

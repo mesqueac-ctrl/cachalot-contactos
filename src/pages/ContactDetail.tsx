@@ -7,6 +7,7 @@ import {
   IconAlert,
   IconArrowLeft,
   IconBuilding,
+  IconFlag,
   IconMail,
   IconPencil,
   IconPhone,
@@ -14,7 +15,10 @@ import {
   IconTrash,
 } from '../components/icons'
 import { StateMessage } from '../components/StateMessage'
+import { StatusBadge } from '../components/StatusBadge'
+import { STATUSES, lastInteraction, statusLabel } from '../lib/crm'
 import { formatDate, formatRelative } from '../lib/dates'
+import type { ContactStatus } from '../types'
 import { useContacts } from '../state/contactsContext'
 import { useToast } from '../state/toastContext'
 import { NotFoundPane } from './NotFoundPane'
@@ -28,13 +32,27 @@ export function ContactDetail() {
 }
 
 function ContactDetailView({ id }: { id: string }) {
-  const { status, contacts, error, reload, deleteContact } = useContacts()
+  const { status, contacts, error, reload, deleteContact, changeStatus } = useContacts()
   const notify = useToast()
   const navigate = useNavigate()
   const contact = contacts.find((c) => c.id === id)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [changingStatus, setChangingStatus] = useState(false)
+
+  async function handleStatusChange(next: ContactStatus) {
+    if (!contact) return
+    setChangingStatus(true)
+    try {
+      await changeStatus(contact.id, next)
+      notify(`Estado actualizado: ${statusLabel(next)}`)
+    } catch (err) {
+      notify(err instanceof Error ? err.message : 'No se pudo cambiar el estado.', 'error')
+    } finally {
+      setChangingStatus(false)
+    }
+  }
 
   async function handleDelete() {
     if (!contact) return
@@ -100,7 +118,12 @@ function ContactDetailView({ id }: { id: string }) {
           <h2 id="detalle-nombre" className="detail__name" ref={headingRef} tabIndex={-1}>
             {contact.name}
           </h2>
-          {contact.company && <p className="detail__company">{contact.company}</p>}
+          {(contact.role || contact.company) && (
+            <p className="detail__company">
+              {[contact.role, contact.company].filter(Boolean).join(' · ')}
+            </p>
+          )}
+          <StatusBadge status={contact.status} />
         </div>
         <div className="detail__actions">
           <Link to={`/contactos/${contact.id}/editar`} className="btn btn--secondary">
@@ -167,11 +190,33 @@ function ContactDetailView({ id }: { id: string }) {
           </dt>
           <dd>{contact.company || <span className="fact__empty">Sin empresa</span>}</dd>
         </div>
+        <div className="fact">
+          <dt>
+            <IconFlag size={16} />
+            <label htmlFor="detalle-estado">Estado</label>
+          </dt>
+          <dd>
+            <select
+              id="detalle-estado"
+              className="input fact__select"
+              value={contact.status}
+              disabled={changingStatus}
+              onChange={(e) => handleStatusChange(e.target.value as ContactStatus)}
+            >
+              {STATUSES.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </dd>
+        </div>
       </dl>
 
       <p className="detail__stamp">
-        Creado el <time dateTime={contact.createdAt}>{formatDate(contact.createdAt)}</time> · última
-        actividad <time dateTime={contact.updatedAt}>{formatRelative(contact.updatedAt)}</time>
+        Creado el <time dateTime={contact.createdAt}>{formatDate(contact.createdAt)}</time> · último
+        contacto{' '}
+        <time dateTime={lastInteraction(contact)}>{formatRelative(lastInteraction(contact))}</time>
       </p>
 
       <ContactNotes contactId={contact.id} notes={contact.notes} />

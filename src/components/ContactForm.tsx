@@ -1,17 +1,25 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { STATUSES } from '../lib/crm'
 import { hasErrors, validateContact, type ContactErrors } from '../lib/validation'
-import type { ContactInput } from '../types'
+import type { ContactInput, ContactStatus } from '../types'
 import { Avatar } from './Avatar'
 import { IconAlert } from './icons'
 import { TextField } from './TextField'
 import './ContactForm.css'
 
-type FieldName = keyof ContactInput
+type FieldName = Exclude<keyof ContactInput, 'status'>
 
-const FIELD_ORDER: FieldName[] = ['name', 'email', 'phone', 'company']
+const FIELD_ORDER: FieldName[] = ['name', 'email', 'phone', 'company', 'role']
 
-const EMPTY: ContactInput = { name: '', email: '', phone: '', company: '' }
+const EMPTY: ContactInput = {
+  name: '',
+  email: '',
+  phone: '',
+  company: '',
+  role: '',
+  status: 'nuevo',
+}
 
 interface Props {
   title: string
@@ -141,15 +149,39 @@ export function ContactForm({
             autoComplete="tel"
             placeholder="+57 300 000 0000"
           />
-          <div className="form-grid__full">
-            <TextField
-              {...fieldProps('company')}
-              label="Empresa"
-              optional
-              autoComplete="organization"
-              placeholder="Ej.: Andina Logística"
-            />
-          </div>
+          <TextField
+            {...fieldProps('company')}
+            label="Empresa"
+            optional
+            autoComplete="organization"
+            placeholder="Ej.: Andina Logística"
+          />
+          <TextField
+            {...fieldProps('role')}
+            label="Cargo"
+            optional
+            autoComplete="organization-title"
+            placeholder="Ej.: Jefe de compras"
+          />
+          <fieldset className="form-grid__full segmented-field">
+            <legend className="field__label">Estado</legend>
+            <div className="segmented">
+              {STATUSES.map((option) => (
+                <label key={option.value} className="segmented__option" data-status={option.value}>
+                  <input
+                    type="radio"
+                    name="contacto-estado"
+                    value={option.value}
+                    checked={values.status === option.value}
+                    onChange={() =>
+                      setValues((current) => ({ ...current, status: option.value as ContactStatus }))
+                    }
+                  />
+                  <span>{option.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </div>
 
         <div className="form-actions">

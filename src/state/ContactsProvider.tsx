@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { ContactsApi } from '../api/contactsApi'
-import type { Contact, ContactInput } from '../types'
+import type { Contact, ContactInput, ContactStatus, NoteKind } from '../types'
 import { ContactsContext, type ContactsContextValue, type LoadStatus } from './contactsContext'
 
 interface Props {
@@ -66,9 +66,19 @@ export function ContactsProvider({ api, children }: Props) {
     [api],
   )
 
+  const changeStatus = useCallback(
+    async (id: string, nextStatus: ContactStatus) => {
+      const contact = contacts.find((c) => c.id === id)
+      if (!contact) throw new Error('Este contacto ya no existe.')
+      const { name, email, phone, company, role } = contact
+      return updateContact(id, { name, email, phone, company, role, status: nextStatus })
+    },
+    [contacts, updateContact],
+  )
+
   const addNote = useCallback(
-    async (contactId: string, body: string) => {
-      const note = await api.addNote(contactId, body)
+    async (contactId: string, body: string, kind: NoteKind) => {
+      const note = await api.addNote(contactId, body, kind)
       setContacts((current) =>
         current.map((c) =>
           c.id === contactId ? { ...c, notes: [note, ...c.notes], updatedAt: note.createdAt } : c,
@@ -79,9 +89,43 @@ export function ContactsProvider({ api, children }: Props) {
     [api],
   )
 
+  const removeNote = useCallback(
+    async (contactId: string, noteId: string) => {
+      await api.removeNote(contactId, noteId)
+      setContacts((current) =>
+        current.map((c) =>
+          c.id === contactId ? { ...c, notes: c.notes.filter((n) => n.id !== noteId) } : c,
+        ),
+      )
+    },
+    [api],
+  )
+
   const value = useMemo<ContactsContextValue>(
-    () => ({ status, contacts, error, reload, createContact, updateContact, deleteContact, addNote }),
-    [status, contacts, error, reload, createContact, updateContact, deleteContact, addNote],
+    () => ({
+      status,
+      contacts,
+      error,
+      reload,
+      createContact,
+      updateContact,
+      deleteContact,
+      changeStatus,
+      addNote,
+      removeNote,
+    }),
+    [
+      status,
+      contacts,
+      error,
+      reload,
+      createContact,
+      updateContact,
+      deleteContact,
+      changeStatus,
+      addNote,
+      removeNote,
+    ],
   )
 
   return <ContactsContext.Provider value={value}>{children}</ContactsContext.Provider>
