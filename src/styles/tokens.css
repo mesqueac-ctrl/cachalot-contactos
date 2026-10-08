@@ -1,0 +1,57 @@
+:root {
+  color-scheme: light;
+
+  /* Paleta */
+  --abyss: #0e2233;
+  --abyss-raised: #17324a;
+  --ivory: #f3ebdd;
+  --bg: #eef2f4;
+  --surface: #ffffff;
+  --surface-sunken: #f5f7f8;
+  --ink: #0e2233;
+  --ink-muted: #4c5f6e;
+  --line: #d6dee4;
+  --line-strong: #a3b2be;
+  --accent: #0b6b68;
+  --accent-hover: #08524f;
+  --accent-soft: #e0efed;
+  --on-accent: #ffffff;
+  --amber: #c9811f;
+  --amber-soft: #fbf0df;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --mark: #fde7b8;
+  --focus: #0b6b68;
+
+  /* Tipografía */
+  --font-display: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Instrument Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Mono', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: clamp(1.875rem, 1.4rem + 1.6vw, 2.5rem);
+
+  /* Espaciado (escala de 4px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 2px rgb(14 34 51 / 0.06);
+  --shadow-md: 0 1px 2px rgb(14 34 51 / 0.05), 0 8px 24px -12px rgb(14 34 51 / 0.18);
+
+  --header-h: 64px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
