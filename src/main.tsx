@@ -1,6 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import '@fontsource-variable/bricolage-grotesque'
+import '@fontsource-variable/instrument-sans'
+import '@fontsource-variable/jetbrains-mono'
+import './styles/tokens.css'
+import './styles/base.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(

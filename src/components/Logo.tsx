@@ -1,0 +1,11 @@
+export function Logo({ size = 28 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path
+        d="M6 17c0-4.4 3.8-7 9-7h4c4 0 7 2.6 7 6.2 0 .9-.6 1.5-1.4 1.5H23c-.8 0-1.3.8-.9 1.5l1.4 2.4c.3.6-.2 1.2-.8 1-2.6-.9-4.4-1.6-7.7-1.6C9.7 21 6 19.6 6 17Z"
+        fill="currentColor"
+      />
+      <circle cx="20.5" cy="14" r="1.1" fill="var(--abyss)" />
+    </svg>
+  )
+}
