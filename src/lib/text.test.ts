@@ -9,6 +9,8 @@ function contact(name: string, company = ''): Contact {
     company,
     email: 'x@y.co',
     phone: '',
+    role: '',
+    status: 'nuevo',
     notes: [],
     createdAt: '',
     updatedAt: '',

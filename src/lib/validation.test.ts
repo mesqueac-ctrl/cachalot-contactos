@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest'
+import type { ContactInput } from '../types'
 import { validateContact } from './validation'
 
-const valid = { name: 'Valentina Ríos', email: 'valentina@andina.co', phone: '', company: '' }
+const valid: ContactInput = {
+  name: 'Valentina Ríos',
+  email: 'valentina@andina.co',
+  phone: '',
+  company: '',
+  role: '',
+  status: 'nuevo',
+}
 
 describe('validateContact', () => {
   it('acepta un contacto con nombre y correo válidos', () => {
