@@ -5,25 +5,31 @@
   --abyss: #0e2233;
   --abyss-raised: #17324a;
   --ivory: #f3ebdd;
-  --bg: #eef2f4;
+  --bg: #f1f4f9;
   --surface: #ffffff;
-  --surface-sunken: #f5f7f8;
-  --ink: #0e2233;
-  --ink-muted: #4c5f6e;
-  --line: #d6dee4;
-  --line-strong: #a3b2be;
-  --accent: #0b6b68;
-  --accent-hover: #08524f;
-  --accent-soft: #e0efed;
+  --surface-sunken: #f5f7fb;
+  --ink: #0f1f33;
+  --ink-muted: #586579;
+  --line: #e4e9f1;
+  --line-strong: #b4bfcd;
+  --accent: #2c5bd6;
+  --accent-hover: #2149b3;
+  --accent-soft: #e8eefc;
   --on-accent: #ffffff;
-  --amber: #c9811f;
-  --amber-soft: #fbf0df;
-  --danger: #b42318;
-  --danger-hover: #8f1c13;
+  --amber: #d48a1c;
+  --amber-soft: #fdf1dd;
+  --danger: #c0352b;
+  --danger-hover: #9b2820;
   --danger-soft: #fdecea;
   --on-danger: #ffffff;
+  --success: #2f8a4c;
+  --success-soft: #e3f3e7;
   --mark: #fde7b8;
-  --focus: #0b6b68;
+  --focus: #2c5bd6;
+
+  /* Barra lateral */
+  --side-from: #0d1f33;
+  --side-to: #1c4278;
 
   /* Tipografía */
   --font-display: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
@@ -37,6 +43,7 @@
   --text-xl: 1.375rem;
   --text-2xl: 1.75rem;
   --text-3xl: clamp(1.875rem, 1.4rem + 1.6vw, 2.5rem);
+  --text-display: clamp(2.25rem, 1.5rem + 2.6vw, 3.5rem);
 
   /* Espaciado (escala de 4px) */
   --space-1: 0.25rem;
@@ -48,13 +55,18 @@
   --space-7: 3rem;
 
   --radius-sm: 6px;
+  --radius-avatar: 30%;
   --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-lg: 18px;
 
-  --shadow-sm: 0 1px 2px rgb(14 34 51 / 0.06);
-  --shadow-md: 0 1px 2px rgb(14 34 51 / 0.05), 0 8px 24px -12px rgb(14 34 51 / 0.18);
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 1px 2px rgb(15 31 51 / 0.04), 0 8px 24px -14px rgb(15 31 51 / 0.14);
+  --shadow-md: 0 1px 2px rgb(15 31 51 / 0.05), 0 14px 34px -14px rgb(15 31 51 / 0.2);
+  --shadow-lg: 0 2px 4px rgb(14 34 51 / 0.06), 0 24px 48px -24px rgb(14 34 51 / 0.35);
 
   --header-h: 64px;
+  --sidebar-w: 248px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -63,26 +75,69 @@
 
   --abyss: #07111a;
   --abyss-raised: #15283a;
-  --bg: #0c1823;
-  --surface: #12212f;
-  --surface-sunken: #0f1c28;
-  --ink: #e6edf2;
-  --ink-muted: #9fb0bd;
-  --line: #233547;
-  --line-strong: #3b5166;
-  --accent: #5cc8bd;
-  --accent-hover: #86dbd2;
-  --accent-soft: #133a3a;
-  --on-accent: #06201f;
-  --amber: #e5a650;
+  --bg: #0b1522;
+  --surface: #122033;
+  --surface-sunken: #0f1b2b;
+  --ink: #e7edf5;
+  --ink-muted: #9aa9bc;
+  --line: #213149;
+  --line-strong: #3a4d68;
+  --accent: #7fa2f5;
+  --accent-hover: #a5bff8;
+  --accent-soft: #1b2b4a;
+  --on-accent: #0a1630;
+  --amber: #e9ab55;
   --amber-soft: #3a2a12;
   --danger: #ff9585;
   --danger-hover: #ffb3a7;
   --danger-soft: #3b1815;
   --on-danger: #2a0805;
+  --success: #74c98b;
+  --success-soft: #173323;
   --mark: #6b5216;
-  --focus: #86dbd2;
+  --focus: #a5bff8;
+
+  --side-from: #060f19;
+  --side-to: #13294a;
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
   --shadow-md: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 48px -24px rgb(0 0 0 / 0.7);
+}
+
+/* Zonas "abisales": la cabecera de la agenda. Redefinen los tokens,
+   así cualquier componente dentro se vuelve marfil sobre azul profundo. */
+.deep {
+  color-scheme: dark;
+
+  --bg: #0e2233;
+  --surface: #0e2233;
+  --surface-sunken: #15304a;
+  --surface-raised: #1b3a57;
+  --ink: #f3ebdd;
+  --ink-muted: #a8b6c0;
+  --line: rgb(243 235 221 / 0.11);
+  --line-strong: rgb(243 235 221 / 0.28);
+  --accent: #9cc2f0;
+  --accent-hover: #c1d9f6;
+  --accent-soft: rgb(156 194 240 / 0.15);
+  --on-accent: #0b1a2c;
+  --amber: #eab062;
+  --amber-soft: rgb(234 176 98 / 0.16);
+  --danger: #ff9f90;
+  --danger-hover: #ffbdb2;
+  --danger-soft: rgb(255 159 144 / 0.14);
+  --on-danger: #2a0805;
+  --mark: rgb(234 176 98 / 0.38);
+  --focus: #c1d9f6;
+
+  background: var(--bg);
+  color: var(--ink);
+}
+
+:root[data-theme='dark'] .deep {
+  --bg: #07121c;
+  --surface: #07121c;
+  --surface-sunken: #0f2131;
+  --surface-raised: #152b3f;
 }

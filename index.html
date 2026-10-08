@@ -11,10 +11,8 @@
       ;(function () {
         try {
           var theme = localStorage.getItem('cachalot.tema')
-          if (theme !== 'light' && theme !== 'dark') {
-            theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-          }
-          document.documentElement.dataset.theme = theme
+          // Claro por defecto; el modo oscuro queda a un clic y se recuerda.
+          document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'light'
         } catch (e) {}
       })()
     </script>

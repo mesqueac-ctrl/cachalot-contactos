@@ -14,7 +14,10 @@ html {
 
 body {
   min-height: 100dvh;
-  background: var(--bg);
+  background:
+    radial-gradient(900px 480px at 100% -10%, var(--accent-soft), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--text-base);
@@ -61,6 +64,12 @@ svg {
 :focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* Los títulos reciben foco por código al cambiar de vista; no son controles. */
+h1[tabindex='-1']:focus-visible,
+h2[tabindex='-1']:focus-visible {
+  outline: none;
 }
 
 ::selection {
@@ -193,6 +202,39 @@ mark {
 .btn--icon {
   width: 40px;
   padding: 0;
+}
+
+.btn--sm {
+  min-height: 34px;
+  padding: 0 var(--space-3);
+}
+
+.btn--danger-text {
+  color: var(--danger);
+}
+
+.btn--danger-text:hover:not(:disabled) {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+/* Botón de solo ícono, discreto, para acciones secundarias junto a un dato */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--surface-sunken);
+  color: var(--ink);
 }
 
 /* Campos de formulario */
