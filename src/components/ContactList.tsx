@@ -87,7 +87,7 @@ export function ContactList({ query, onQueryChange }: Props) {
                 onQueryChange('')
                 searchRef.current?.focus()
               }}
-              aria-label="Limpiar búsqueda"
+              aria-label="Borrar el texto de búsqueda"
             >
               <IconClose size={16} />
             </button>
