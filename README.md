@@ -2,6 +2,8 @@
 
 Interfaz web para manejar los contactos de clientes de un CRM: buscarlos, ver su información, registrar el historial de llamadas, reuniones y correos, **agendar el próximo paso con cada cliente** y ver cada día qué toca hacer, además de crear, editar o eliminar contactos.
 
+**Demo publicada:** https://cachalot-crm-prueba.netlify.app
+
 Hecha con **React 19 + TypeScript + Vite**. No necesita backend: los datos salen de un archivo JSON y se guardan en `localStorage` a través de una API simulada con latencia.
 
 ## Cómo ejecutarlo
@@ -75,14 +77,17 @@ Rutas (con `HashRouter`, para que funcione en cualquier hosting estático):
 - **Accesibilidad:** etiquetas en todos los campos, errores conectados con `aria-describedby` y `aria-invalid`, regiones `aria-live` para resultados de búsqueda y notificaciones, enlace "Saltar al contenido", foco visible, diálogo nativo `<dialog>` (atrapa el foco y se cierra con `Esc`) y `prefers-reduced-motion` respetado. Los colores cumplen contraste AA en modo claro y oscuro.
 - **Diseño:** paleta náutica (azul abismo, azul real y latón), Bricolage Grotesque para títulos, Instrument Sans para el texto y JetBrains Mono para correos, teléfonos y fechas. Las fuentes van empaquetadas con `@fontsource`, sin depender de CDNs.
 
-## Publicar (opcional)
+## Publicar
 
-El build usa rutas relativas (`base: './'`), así que funciona en GitHub Pages, Netlify o Vercel sin configuración extra:
+La app está publicada en Netlify: https://cachalot-crm-prueba.netlify.app
+
+El build usa rutas relativas (`base: './'`) y `HashRouter`, así que funciona en cualquier hosting estático sin configuración extra. Para actualizar la demo:
 
 ```bash
 npm run build
-npx gh-pages -d dist   # GitHub Pages, rama gh-pages
 ```
+
+y en Netlify, en **Deploys**, arrastra la carpeta `dist`.
 
 ## Uso de IA
 
