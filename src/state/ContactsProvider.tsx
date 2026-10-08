@@ -14,10 +14,8 @@ export function ContactsProvider({ api, children }: Props) {
   const [error, setError] = useState<string | null>(null)
   const requestId = useRef(0)
 
-  const reload = useCallback(() => {
+  const fetchContacts = useCallback(() => {
     const id = ++requestId.current
-    setStatus('loading')
-    setError(null)
     api
       .list()
       .then((data) => {
@@ -33,8 +31,14 @@ export function ContactsProvider({ api, children }: Props) {
   }, [api])
 
   useEffect(() => {
-    reload()
-  }, [reload])
+    fetchContacts()
+  }, [fetchContacts])
+
+  const reload = useCallback(() => {
+    setStatus('loading')
+    setError(null)
+    fetchContacts()
+  }, [fetchContacts])
 
   const createContact = useCallback(
     async (input: ContactInput) => {

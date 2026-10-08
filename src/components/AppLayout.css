@@ -1,0 +1,134 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  height: var(--header-h);
+  padding: 0 var(--space-4);
+  background: var(--abyss);
+  color: var(--ivory);
+}
+
+.topbar :focus-visible {
+  outline-color: var(--ivory);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2) var(--space-1) 0;
+  border-radius: var(--radius-sm);
+  color: var(--ivory);
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: #fff;
+}
+
+.brand__name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.brand__section {
+  padding: 2px 6px;
+  border: 1px solid rgb(243 235 221 / 0.35);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgb(243 235 221 / 0.85);
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn--on-dark {
+  background: var(--ivory);
+  color: var(--abyss);
+}
+
+.btn--on-dark:hover {
+  background: #fff;
+  color: var(--abyss);
+}
+
+.btn--ghost-dark {
+  background: transparent;
+  color: var(--ivory);
+}
+
+.btn--ghost-dark:hover {
+  background: var(--abyss-raised);
+  color: #fff;
+}
+
+/* Lista + panel. En móvil se muestra uno a la vez según la ruta. */
+.workspace__pane:focus {
+  outline: none;
+}
+
+.workspace[data-view='list'] .workspace__pane,
+.workspace[data-view='pane'] .workspace__list {
+  display: none;
+}
+
+.workspace__list {
+  min-height: calc(100dvh - var(--header-h));
+  background: var(--surface);
+}
+
+.workspace__list .list-panel__head {
+  top: var(--header-h);
+}
+
+.hide-sm {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .hide-sm {
+    display: inline;
+  }
+}
+
+@media (min-width: 900px) {
+  .topbar {
+    padding: 0 var(--space-5);
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: minmax(320px, 400px) 1fr;
+    height: calc(100dvh - var(--header-h));
+  }
+
+  .workspace[data-view] .workspace__list,
+  .workspace[data-view] .workspace__pane {
+    display: block;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  .workspace__list {
+    min-height: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .workspace__list .list-panel__head {
+    top: 0;
+  }
+}

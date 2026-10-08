@@ -1,0 +1,110 @@
+/* Avatar: los tonos comparten luminosidad para que ninguno destaque sobre otro */
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+}
+
+.avatar--md {
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-sm);
+}
+
+.avatar--lg {
+  width: 72px;
+  height: 72px;
+  font-size: var(--text-xl);
+}
+
+.avatar[data-tone='0'] { --tone-bg: #d5ebe8; --tone-fg: #0a4a47; }
+.avatar[data-tone='1'] { --tone-bg: #f5e3c4; --tone-fg: #67400f; }
+.avatar[data-tone='2'] { --tone-bg: #dbe3f1; --tone-fg: #233e6b; }
+.avatar[data-tone='3'] { --tone-bg: #f5dbd3; --tone-fg: #772d1d; }
+.avatar[data-tone='4'] { --tone-bg: #dfe8d0; --tone-fg: #3b511f; }
+.avatar[data-tone='5'] { --tone-bg: #e9dbea; --tone-fg: #582c5a; }
+
+/* Mensajes de estado: vacío, sin resultados, error */
+.state {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  max-width: 360px;
+  margin: var(--space-6) auto;
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.state__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-2);
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  border: 1px solid var(--line);
+  color: var(--ink-muted);
+}
+
+.state--danger .state__icon {
+  background: var(--danger-soft);
+  border-color: transparent;
+  color: var(--danger);
+}
+
+.state__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.state__text {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.state__action {
+  margin-top: var(--space-3);
+}
+
+/* Esqueletos */
+.skeleton {
+  display: block;
+  background: linear-gradient(90deg, var(--line) 0%, var(--surface-sunken) 50%, var(--line) 100%);
+  background-size: 200% 100%;
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton--avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.skeleton--line {
+  height: 12px;
+}
+
+.skeleton--thin {
+  height: 9px;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
