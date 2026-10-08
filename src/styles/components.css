@@ -30,6 +30,13 @@
 .avatar[data-tone='4'] { --tone-bg: #dfe8d0; --tone-fg: #3b511f; }
 .avatar[data-tone='5'] { --tone-bg: #e9dbea; --tone-fg: #582c5a; }
 
+[data-theme='dark'] .avatar[data-tone='0'] { --tone-bg: #16403d; --tone-fg: #a9e3dc; }
+[data-theme='dark'] .avatar[data-tone='1'] { --tone-bg: #47331a; --tone-fg: #f3d29f; }
+[data-theme='dark'] .avatar[data-tone='2'] { --tone-bg: #22324f; --tone-fg: #bfd0f0; }
+[data-theme='dark'] .avatar[data-tone='3'] { --tone-bg: #4a2620; --tone-fg: #f4c0b3; }
+[data-theme='dark'] .avatar[data-tone='4'] { --tone-bg: #2f3e1f; --tone-fg: #cde2ae; }
+[data-theme='dark'] .avatar[data-tone='5'] { --tone-bg: #3f2541; --tone-fg: #e7c3e9; }
+
 /* Mensajes de estado: vacío, sin resultados, error */
 .state {
   display: grid;

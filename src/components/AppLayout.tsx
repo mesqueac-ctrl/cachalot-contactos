@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { Link, Outlet, useMatch } from 'react-router-dom'
+import { useTheme } from '../lib/theme'
 import { ContactList } from './ContactList'
-import { IconPlus } from './icons'
+import { IconMoon, IconPlus, IconSun } from './icons'
 import { Logo } from './Logo'
 import './AppLayout.css'
 
 export function AppLayout() {
   const [query, setQuery] = useState('')
+  const { theme, toggle } = useTheme()
   const isIndex = useMatch({ path: '/', end: true }) !== null
 
   return (
@@ -33,6 +35,15 @@ export function AppLayout() {
         </Link>
 
         <div className="topbar__actions">
+          <button
+            type="button"
+            className="btn btn--icon btn--ghost-dark"
+            onClick={toggle}
+            aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+          >
+            {theme === 'dark' ? <IconSun /> : <IconMoon />}
+          </button>
           <Link to="/contactos/nuevo" className="btn btn--on-dark">
             <IconPlus size={16} />
             <span>

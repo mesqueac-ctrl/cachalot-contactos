@@ -170,12 +170,12 @@ mark {
 
 .btn--danger {
   background: var(--danger);
-  color: #fff;
+  color: var(--on-danger);
 }
 
 .btn--danger:hover:not(:disabled) {
-  background: #8f1c13;
-  color: #fff;
+  background: var(--danger-hover);
+  color: var(--on-danger);
 }
 
 .btn--danger-quiet {
