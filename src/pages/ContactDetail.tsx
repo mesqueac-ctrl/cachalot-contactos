@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Avatar } from '../components/Avatar'
+import { ContactNotes } from '../components/ContactNotes'
 import { IconAlert, IconArrowLeft, IconBuilding, IconMail, IconPhone, IconRefresh } from '../components/icons'
 import { StateMessage } from '../components/StateMessage'
 import { formatDate, formatRelative } from '../lib/dates'
@@ -109,6 +110,8 @@ export function ContactDetail() {
         Creado el <time dateTime={contact.createdAt}>{formatDate(contact.createdAt)}</time> · última
         actividad <time dateTime={contact.updatedAt}>{formatRelative(contact.updatedAt)}</time>
       </p>
+
+      <ContactNotes contactId={contact.id} notes={contact.notes} />
     </article>
   )
 }
