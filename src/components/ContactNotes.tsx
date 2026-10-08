@@ -4,21 +4,17 @@ import { formatDate, formatRelative, formatTime } from '../lib/dates'
 import { pluralize } from '../lib/text'
 import { useContacts } from '../state/contactsContext'
 import { useToast } from '../state/toastContext'
-import type { Note, NoteKind } from '../types'
-import { IconAlert, IconCalendar, IconMail, IconNote, IconPhone, IconTrash } from './icons'
+import type { Contact, Note, NoteKind } from '../types'
+import { IconAlert, IconCalendarCheck, IconTrash } from './icons'
+import { NextStepFields } from './NextStepFields'
+import { NoteKindIcon } from './NoteKindIcon'
 import './ContactNotes.css'
 
 export const NOTE_MAX_LENGTH = 500
 
-const KIND_ICON: Record<NoteKind, typeof IconNote> = {
-  llamada: IconPhone,
-  reunion: IconCalendar,
-  correo: IconMail,
-  nota: IconNote,
-}
-
-export function ContactNotes({ contactId, notes }: { contactId: string; notes: Note[] }) {
-  const { removeNote } = useContacts()
+export function ContactNotes({ contact }: { contact: Contact }) {
+  const { id: contactId, notes } = contact
+  const { removeNote, restoreNote } = useContacts()
   const notify = useToast()
   const [removing, setRemoving] = useState<string | null>(null)
   const sorted = [...notes].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
@@ -27,9 +23,13 @@ export function ContactNotes({ contactId, notes }: { contactId: string; notes: N
     setRemoving(note.id)
     try {
       await removeNote(contactId, note.id)
-      notify('Nota eliminada')
+      notify('Nota eliminada', 'success', {
+        label: 'Deshacer',
+        onAction: () => void restoreNote(contactId, note),
+      })
     } catch (err) {
       notify(err instanceof Error ? err.message : 'No se pudo eliminar la nota.', 'error')
+    } finally {
       setRemoving(null)
     }
   }
@@ -37,33 +37,32 @@ export function ContactNotes({ contactId, notes }: { contactId: string; notes: N
   return (
     <section className="notes" aria-labelledby="notas-titulo">
       <div className="notes__head">
-        <h3 id="notas-titulo" className="notes__title">
-          Notas
-        </h3>
+        <h2 id="notas-titulo" className="notes__title">
+          Historial
+        </h2>
         <span className="notes__count">{pluralize(notes.length, 'nota', 'notas')}</span>
       </div>
 
-      <NoteComposer key={contactId} contactId={contactId} />
+      <NoteComposer key={contactId} contactId={contactId} hasNextStep={contact.nextStep !== null} />
 
       {sorted.length === 0 ? (
-        <p className="notes__empty">
-          Aún no hay notas. Registra aquí llamadas, reuniones o acuerdos con este contacto.
-        </p>
+        <p className="notes__empty">Aún no hay notas.</p>
       ) : (
         <ol className="timeline" aria-label="Historial de notas, de la más reciente a la más antigua">
           {sorted.map((note) => {
-            const Icon = KIND_ICON[note.kind]
             return (
               <li key={note.id} className="timeline__item" data-kind={note.kind}>
                 <span className="timeline__node" aria-hidden="true">
-                  <Icon size={12} strokeWidth={2.2} />
+                  <NoteKindIcon kind={note.kind} />
                 </span>
                 <div className="timeline__stamp">
                   <span className="timeline__kind">{noteKindLabel(note.kind)}</span>
-                  <time dateTime={note.createdAt}>
-                    {formatDate(note.createdAt)} · {formatTime(note.createdAt)}
+                  <time
+                    dateTime={note.createdAt}
+                    title={`${formatDate(note.createdAt)} · ${formatTime(note.createdAt)}`}
+                  >
+                    {formatRelative(note.createdAt)}
                   </time>
-                  <span className="timeline__relative">{formatRelative(note.createdAt)}</span>
                   <button
                     type="button"
                     className="timeline__delete"
@@ -85,8 +84,11 @@ export function ContactNotes({ contactId, notes }: { contactId: string; notes: N
   )
 }
 
-function NoteComposer({ contactId }: { contactId: string }) {
+function NoteComposer({ contactId, hasNextStep }: { contactId: string; hasNextStep: boolean }) {
   const { addNote } = useContacts()
+  const [nextDate, setNextDate] = useState('')
+  const [nextText, setNextText] = useState('')
+  const [scheduling, setScheduling] = useState(false)
   const notify = useToast()
   const [body, setBody] = useState('')
   const [kind, setKind] = useState<NoteKind>('llamada')
@@ -115,9 +117,13 @@ function NoteComposer({ contactId }: { contactId: string }) {
     setSaving(true)
     setError(null)
     try {
-      await addNote(contactId, body, kind)
+      await addNote(contactId, body, kind, nextDate ? { date: nextDate, text: nextText } : undefined)
       setBody('')
-      notify(`${noteKindLabel(kind)} ${kind === 'correo' ? 'registrado' : 'registrada'}`)
+      setNextDate('')
+      setNextText('')
+      setScheduling(false)
+      const saved = `${noteKindLabel(kind)} ${kind === 'correo' ? 'registrado' : 'registrada'}`
+      notify(nextDate ? `${saved} y próximo paso agendado` : saved)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo guardar la nota.')
     } finally {
@@ -132,7 +138,6 @@ function NoteComposer({ contactId }: { contactId: string }) {
         <legend className="visually-hidden">Tipo de nota</legend>
         <div className="segmented">
           {NOTE_KINDS.map((option) => {
-            const Icon = KIND_ICON[option.value]
             return (
               <label key={option.value} className="segmented__option">
                 <input
@@ -143,7 +148,7 @@ function NoteComposer({ contactId }: { contactId: string }) {
                   onChange={() => setKind(option.value)}
                 />
                 <span>
-                  <Icon size={14} />
+                  <NoteKindIcon kind={option.value} size={14} />
                   {option.label}
                 </span>
               </label>
@@ -151,15 +156,15 @@ function NoteComposer({ contactId }: { contactId: string }) {
           })}
         </div>
       </fieldset>
-      <label htmlFor={id} className="field__label">
-        Nueva nota
+      <label htmlFor={id} className="visually-hidden">
+        Qué pasó
       </label>
       <textarea
         ref={textareaRef}
         id={id}
         className="input composer__input"
-        placeholder="Ej.: Llamada de seguimiento el 5 de octubre"
-        rows={3}
+        placeholder="¿Qué pasó? Ej.: Llamada de seguimiento el 5 de octubre"
+        rows={2}
         value={body}
         onChange={(e) => {
           setBody(e.target.value)
@@ -174,22 +179,58 @@ function NoteComposer({ contactId }: { contactId: string }) {
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${errorId} ${hintId}` : hintId}
       />
+      <p id={hintId} className="visually-hidden">
+        Ctrl + Enter para guardar. Máximo {NOTE_MAX_LENGTH} caracteres.
+      </p>
       {error && (
         <p id={errorId} className="field__error">
           <IconAlert size={16} />
           {error}
         </p>
       )}
+
+      {scheduling && (
+        <fieldset className="composer__next">
+          <legend className="visually-hidden">Próximo paso</legend>
+          <NextStepFields
+            id={`${id}-paso`}
+            date={nextDate}
+            text={nextText}
+            onDateChange={setNextDate}
+            onTextChange={setNextText}
+          />
+        </fieldset>
+      )}
+
       <div className="composer__footer">
-        <p id={hintId} className="field__hint">
-          <span className={tooLong ? 'composer__counter--over' : undefined}>
-            {length}/{NOTE_MAX_LENGTH}
-          </span>
-          <span className="composer__shortcut"> · Ctrl + Enter para guardar</span>
-        </p>
-        <button type="submit" className="btn btn--primary" disabled={saving}>
-          {saving ? 'Guardando…' : 'Agregar nota'}
+        <button
+          type="button"
+          className="composer__schedule"
+          aria-expanded={scheduling}
+          onClick={() => {
+            setScheduling((open) => !open)
+            setNextDate('')
+            setNextText('')
+          }}
+        >
+          <IconCalendarCheck size={16} />
+          {scheduling ? 'No agendar' : hasNextStep ? 'Cambiar próximo paso' : 'Agendar seguimiento'}
         </button>
+        <span className="composer__actions">
+          {length > NOTE_MAX_LENGTH - 100 && (
+            <span className={tooLong ? 'composer__counter composer__counter--over' : 'composer__counter'}>
+              {length}/{NOTE_MAX_LENGTH}
+            </span>
+          )}
+          <button
+            type="submit"
+            className="btn btn--primary"
+            disabled={saving}
+            title="Ctrl + Enter"
+          >
+            {saving ? 'Guardando…' : 'Agregar nota'}
+          </button>
+        </span>
       </div>
     </form>
   )

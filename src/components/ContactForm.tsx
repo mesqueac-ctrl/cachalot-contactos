@@ -1,6 +1,7 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { STATUSES } from '../lib/crm'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 import { hasErrors, validateContact, type ContactErrors } from '../lib/validation'
 import type { ContactInput, ContactStatus } from '../types'
 import { Avatar } from './Avatar'
@@ -46,6 +47,7 @@ export function ContactForm({
   const [saving, setSaving] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const refs = useRef<Partial<Record<FieldName, HTMLInputElement | null>>>({})
+  useDocumentTitle(title)
 
   const errors = validateContact(values, { takenEmails })
   const visibleErrors: ContactErrors = {}
@@ -90,11 +92,11 @@ export function ContactForm({
   }
 
   return (
-    <div className="pane form-page">
+    <div className="page page--narrow form-page">
       <header className="form-page__header">
         <Avatar name={values.name || '?'} company={values.company} size="lg" />
         <div>
-          <h2 className="form-page__title">{title}</h2>
+          <h1 className="form-page__title">{title}</h1>
           <p className="form-page__lede">
             {values.name.trim()
               ? [values.name.trim(), values.company.trim()].filter(Boolean).join(' · ')

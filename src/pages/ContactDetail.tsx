@@ -1,23 +1,26 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Avatar } from '../components/Avatar'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ContactNotes } from '../components/ContactNotes'
+import { CopyButton } from '../components/CopyButton'
 import {
   IconAlert,
   IconArrowLeft,
-  IconBuilding,
-  IconFlag,
+  IconClock,
   IconMail,
   IconPencil,
   IconPhone,
   IconRefresh,
   IconTrash,
 } from '../components/icons'
+import { NextStepCard } from '../components/NextStepCard'
+import { Sonar } from '../components/Sonar'
 import { StateMessage } from '../components/StateMessage'
 import { StatusBadge } from '../components/StatusBadge'
-import { STATUSES, lastInteraction, statusLabel } from '../lib/crm'
+import { STATUSES, freshness, lastInteraction, statusLabel } from '../lib/crm'
 import { formatDate, formatRelative } from '../lib/dates'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 import type { ContactStatus } from '../types'
 import { useContacts } from '../state/contactsContext'
 import { useToast } from '../state/toastContext'
@@ -31,15 +34,23 @@ export function ContactDetail() {
   return <ContactDetailView key={id} id={id} />
 }
 
+/** Vuelve a la lista con la misma búsqueda, filtro y orden con que se dejó. */
+function useBackToList() {
+  const state = useLocation().state as { from?: string } | null
+  return state?.from ?? '/contactos'
+}
+
 function ContactDetailView({ id }: { id: string }) {
   const { status, contacts, error, reload, deleteContact, changeStatus } = useContacts()
   const notify = useToast()
   const navigate = useNavigate()
+  const backTo = useBackToList()
   const contact = contacts.find((c) => c.id === id)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [changingStatus, setChangingStatus] = useState(false)
+  useDocumentTitle(contact?.name ?? null)
 
   async function handleStatusChange(next: ContactStatus) {
     if (!contact) return
@@ -60,7 +71,7 @@ function ContactDetailView({ id }: { id: string }) {
     try {
       await deleteContact(contact.id)
       notify(`Contacto eliminado: ${contact.name}`)
-      navigate('/')
+      navigate(backTo)
     } catch (err) {
       notify(err instanceof Error ? err.message : 'No se pudo eliminar el contacto.', 'error')
       setDeleting(false)
@@ -68,16 +79,17 @@ function ContactDetailView({ id }: { id: string }) {
     }
   }
 
-  // En móvil la lista desaparece al abrir el detalle; el foco debe acompañar al contenido.
+  // Al cambiar de vista el foco acompaña al contenido nuevo.
+  const ready = status === 'ready'
   useEffect(() => {
-    if (!window.matchMedia('(min-width: 900px)').matches) headingRef.current?.focus()
-  }, [id, status])
+    if (ready) headingRef.current?.focus()
+  }, [ready])
 
   if (status === 'loading') return <DetailSkeleton />
 
   if (status === 'error') {
     return (
-      <div className="pane pane--center">
+      <div className="page page--center">
         <StateMessage
           role="alert"
           tone="danger"
@@ -105,39 +117,76 @@ function ContactDetailView({ id }: { id: string }) {
     )
   }
 
+  const telHref = contact.phone ? `tel:${contact.phone.replace(/[^\d+]/g, '')}` : null
+
   return (
-    <article className="pane detail" aria-labelledby="detalle-nombre">
-      <Link to="/" className="back-link back-link--mobile">
+    <article className="page detail" aria-labelledby="detalle-nombre">
+      <Link to={backTo} className="back-link" aria-label="Volver a contactos">
         <IconArrowLeft size={16} />
         Contactos
       </Link>
 
-      <header className="detail__header">
-        <Avatar name={contact.name} company={contact.company} size="lg" />
-        <div className="detail__identity">
-          <h2 id="detalle-nombre" className="detail__name" ref={headingRef} tabIndex={-1}>
-            {contact.name}
-          </h2>
-          {(contact.role || contact.company) && (
-            <p className="detail__company">
-              {[contact.role, contact.company].filter(Boolean).join(' · ')}
-            </p>
-          )}
-          <StatusBadge status={contact.status} />
+      <header className="profile">
+        <div className="profile__banner" aria-hidden="true">
+          <Sonar className="profile__sonar" />
         </div>
-        <div className="detail__actions">
-          <Link to={`/contactos/${contact.id}/editar`} className="btn btn--secondary">
-            <IconPencil size={16} />
-            Editar
-          </Link>
-          <button
-            type="button"
-            className="btn btn--danger-quiet"
-            onClick={() => setConfirmOpen(true)}
-          >
-            <IconTrash size={16} />
-            Eliminar
-          </button>
+        <div className="profile__body">
+          <Avatar
+            name={contact.name}
+            company={contact.company}
+            size="lg"
+            freshness={freshness(contact)}
+          />
+          <div className="profile__identity">
+            <h1 id="detalle-nombre" className="profile__name" ref={headingRef} tabIndex={-1}>
+              {contact.name}
+            </h1>
+            {(contact.role || contact.company) && (
+              <p className="profile__company">
+                {[contact.role, contact.company].filter(Boolean).join(' · ')}
+              </p>
+            )}
+            <div className="profile__meta">
+              <StatusBadge status={contact.status} />
+              <span className="profile__stamp">
+                <IconClock size={14} />
+                <time dateTime={lastInteraction(contact)}>
+                  {formatRelative(lastInteraction(contact))}
+                </time>
+              </span>
+            </div>
+          </div>
+
+          <div className="profile__actions">
+            {telHref && (
+              <a href={telHref} className="btn btn--primary">
+                <IconPhone size={16} />
+                Llamar
+              </a>
+            )}
+            <a href={`mailto:${contact.email}`} className="btn btn--secondary">
+              <IconMail size={16} />
+              Escribir
+            </a>
+            <Link
+              to={`/contactos/${contact.id}/editar`}
+              state={{ from: backTo }}
+              className="btn btn--secondary btn--icon"
+              aria-label="Editar"
+              title="Editar"
+            >
+              <IconPencil size={16} />
+            </Link>
+            <button
+              type="button"
+              className="btn btn--secondary btn--icon btn--danger-text"
+              onClick={() => setConfirmOpen(true)}
+              aria-label="Eliminar"
+              title="Eliminar"
+            >
+              <IconTrash size={16} />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -156,86 +205,95 @@ function ContactDetailView({ id }: { id: string }) {
         se puede deshacer.
       </ConfirmDialog>
 
-      <dl className="facts">
-        <div className="fact">
-          <dt>
-            <IconMail size={16} />
-            Correo
-          </dt>
-          <dd>
-            <a href={`mailto:${contact.email}`} className="mono">
-              {contact.email}
-            </a>
-          </dd>
+      <div className="detail__layout">
+        <div className="detail__main">
+          <NextStepCard contact={contact} />
+          <ContactNotes contact={contact} />
         </div>
-        <div className="fact">
-          <dt>
-            <IconPhone size={16} />
-            Teléfono
-          </dt>
-          <dd>
-            {contact.phone ? (
-              <a href={`tel:${contact.phone.replace(/[^\d+]/g, '')}`} className="mono">
-                {contact.phone}
-              </a>
-            ) : (
-              <span className="fact__empty">Sin teléfono</span>
-            )}
-          </dd>
-        </div>
-        <div className="fact">
-          <dt>
-            <IconBuilding size={16} />
-            Empresa
-          </dt>
-          <dd>{contact.company || <span className="fact__empty">Sin empresa</span>}</dd>
-        </div>
-        <div className="fact">
-          <dt>
-            <IconFlag size={16} />
-            <label htmlFor="detalle-estado">Estado</label>
-          </dt>
-          <dd>
-            <select
-              id="detalle-estado"
-              className="input fact__select"
-              value={contact.status}
-              disabled={changingStatus}
-              onChange={(e) => handleStatusChange(e.target.value as ContactStatus)}
-            >
-              {STATUSES.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </dd>
-        </div>
-      </dl>
 
-      <p className="detail__stamp">
-        Creado el <time dateTime={contact.createdAt}>{formatDate(contact.createdAt)}</time> · último
-        contacto{' '}
-        <time dateTime={lastInteraction(contact)}>{formatRelative(lastInteraction(contact))}</time>
-      </p>
-
-      <ContactNotes contactId={contact.id} notes={contact.notes} />
+        <aside className="detail__aside card" aria-labelledby="ficha-titulo">
+          <h2 id="ficha-titulo" className="card__title">
+            Datos de contacto
+          </h2>
+          <dl className="facts">
+            <div className="fact">
+              <dt>Correo</dt>
+              <dd className="fact__value">
+                <a href={`mailto:${contact.email}`} className="mono">
+                  {contact.email}
+                </a>
+                <CopyButton value={contact.email} label="Copiar correo" done="Correo copiado" />
+              </dd>
+            </div>
+            <div className="fact">
+              <dt>Teléfono</dt>
+              <dd className="fact__value">
+                {contact.phone && telHref ? (
+                  <>
+                    <a href={telHref} className="mono">
+                      {contact.phone}
+                    </a>
+                    <CopyButton
+                      value={contact.phone}
+                      label="Copiar teléfono"
+                      done="Teléfono copiado"
+                    />
+                  </>
+                ) : (
+                  <span className="fact__empty">Sin teléfono</span>
+                )}
+              </dd>
+            </div>
+            <div className="fact">
+              <dt>Empresa</dt>
+              <dd>{contact.company || <span className="fact__empty">Sin empresa</span>}</dd>
+            </div>
+            <div className="fact">
+              <dt>Cargo</dt>
+              <dd>{contact.role || <span className="fact__empty">Sin cargo</span>}</dd>
+            </div>
+            <div className="fact">
+              <dt>
+                <label htmlFor="detalle-estado">Estado</label>
+              </dt>
+              <dd>
+                <select
+                  id="detalle-estado"
+                  className="input fact__select"
+                  value={contact.status}
+                  disabled={changingStatus}
+                  onChange={(e) => handleStatusChange(e.target.value as ContactStatus)}
+                >
+                  {STATUSES.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </dd>
+            </div>
+            <div className="fact">
+              <dt>Creado</dt>
+              <dd>
+                <time dateTime={contact.createdAt}>{formatDate(contact.createdAt)}</time>
+              </dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
     </article>
   )
 }
 
 function DetailSkeleton() {
   return (
-    <div className="pane detail" role="status">
+    <div className="page detail" role="status">
       <span className="visually-hidden">Cargando contacto…</span>
-      <div className="detail__header" aria-hidden="true">
-        <span className="skeleton" style={{ width: 72, height: 72, borderRadius: '50%' }} />
-        <div className="detail__identity" style={{ gap: 10 }}>
-          <span className="skeleton" style={{ width: 220, height: 24 }} />
-          <span className="skeleton" style={{ width: 140, height: 14 }} />
-        </div>
+      <span className="skeleton" style={{ height: 190, borderRadius: 18 }} aria-hidden="true" />
+      <div className="detail__layout" aria-hidden="true">
+        <span className="skeleton" style={{ height: 220, borderRadius: 16 }} />
+        <span className="skeleton" style={{ height: 220, borderRadius: 16 }} />
       </div>
-      <span className="skeleton" style={{ height: 150, borderRadius: 16 }} aria-hidden="true" />
     </div>
   )
 }

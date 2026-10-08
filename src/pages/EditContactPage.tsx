@@ -14,7 +14,7 @@ export function EditContactPage() {
 
   if (status === 'loading') {
     return (
-      <div className="pane" role="status">
+      <div className="page page--narrow" role="status">
         <span className="visually-hidden">Cargando contacto…</span>
       </div>
     )

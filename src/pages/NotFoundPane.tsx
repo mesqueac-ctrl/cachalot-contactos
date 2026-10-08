@@ -11,12 +11,12 @@ export function NotFoundPane({
   text?: string
 }) {
   return (
-    <div className="pane pane--center">
+    <div className="page page--center">
       <StateMessage
         icon={<IconSearch size={22} />}
         title={title}
         action={
-          <Link to="/" className="btn btn--secondary">
+          <Link to="/contactos" className="btn btn--secondary">
             Volver a contactos
           </Link>
         }

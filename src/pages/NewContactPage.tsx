@@ -14,7 +14,7 @@ export function NewContactPage() {
       title="Nuevo contacto"
       submitLabel="Crear contacto"
       savingLabel="Creando…"
-      cancelTo="/"
+      cancelTo="/contactos"
       takenEmails={contacts.map((c) => c.email.toLowerCase())}
       onSubmit={async (input) => {
         const created = await createContact(input)
