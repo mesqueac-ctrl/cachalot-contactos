@@ -7,6 +7,10 @@
     "company": "Andina Logística",
     "role": "Gerente de operaciones",
     "status": "seguimiento",
+    "nextStep": {
+      "date": "2026-10-09",
+      "text": "Enviar la cotización de las 3 bodegas en Funza"
+    },
     "createdAt": "2026-08-12T15:20:00.000Z",
     "updatedAt": "2026-10-05T19:10:00.000Z",
     "notes": [
@@ -32,6 +36,10 @@
     "company": "Cafetera Sierra Nevada",
     "role": "Director comercial",
     "status": "activo",
+    "nextStep": {
+      "date": "2026-10-09",
+      "text": "Confirmar que la cuenta quedó activa"
+    },
     "createdAt": "2026-07-03T13:00:00.000Z",
     "updatedAt": "2026-09-29T16:45:00.000Z",
     "notes": [
@@ -51,6 +59,7 @@
     "company": "Ortega & Pardo Abogados",
     "role": "Socia",
     "status": "nuevo",
+    "nextStep": null,
     "createdAt": "2026-09-01T10:30:00.000Z",
     "updatedAt": "2026-09-01T10:30:00.000Z",
     "notes": []
@@ -63,6 +72,10 @@
     "company": "Textiles del Valle",
     "role": "Jefe de compras",
     "status": "seguimiento",
+    "nextStep": {
+      "date": "2026-10-08",
+      "text": "Confirmar la fecha de renovación para noviembre"
+    },
     "createdAt": "2026-06-21T09:00:00.000Z",
     "updatedAt": "2026-10-02T21:15:00.000Z",
     "notes": [
@@ -94,6 +107,7 @@
     "company": "Clínica Aurora",
     "role": "Coordinadora de TI",
     "status": "activo",
+    "nextStep": null,
     "createdAt": "2026-08-28T18:00:00.000Z",
     "updatedAt": "2026-09-30T13:20:00.000Z",
     "notes": [
@@ -113,6 +127,10 @@
     "company": "Pixel Caribe",
     "role": "Fundador",
     "status": "nuevo",
+    "nextStep": {
+      "date": "2026-10-16",
+      "text": "Agendar la primera demo"
+    },
     "createdAt": "2026-09-14T20:10:00.000Z",
     "updatedAt": "2026-09-14T20:10:00.000Z",
     "notes": []
@@ -125,6 +143,7 @@
     "company": "Andina Logística",
     "role": "Analista de compras",
     "status": "activo",
+    "nextStep": null,
     "createdAt": "2026-08-12T15:40:00.000Z",
     "updatedAt": "2026-09-22T17:00:00.000Z",
     "notes": [
@@ -144,6 +163,10 @@
     "company": "Agrofrutos del Quindío",
     "role": "Gerente general",
     "status": "activo",
+    "nextStep": {
+      "date": "2026-10-14",
+      "text": "Visita a la finca: capacitar al equipo de despacho"
+    },
     "createdAt": "2026-05-30T12:00:00.000Z",
     "updatedAt": "2026-10-06T14:35:00.000Z",
     "notes": [
@@ -163,6 +186,10 @@
     "company": "Banco Terra",
     "role": "Directora de tecnología",
     "status": "seguimiento",
+    "nextStep": {
+      "date": "2026-10-06",
+      "text": "Pedir el visto bueno del área de compras"
+    },
     "createdAt": "2026-04-17T16:00:00.000Z",
     "updatedAt": "2026-09-05T15:00:00.000Z",
     "notes": [
@@ -182,6 +209,7 @@
     "company": "Duque Construcciones",
     "role": "Gerente de proyectos",
     "status": "nuevo",
+    "nextStep": null,
     "createdAt": "2026-09-25T11:45:00.000Z",
     "updatedAt": "2026-09-25T11:45:00.000Z",
     "notes": []
@@ -194,6 +222,7 @@
     "company": "Cafetera Sierra Nevada",
     "role": "Asistente de gerencia",
     "status": "activo",
+    "nextStep": null,
     "createdAt": "2026-07-03T13:20:00.000Z",
     "updatedAt": "2026-08-19T19:30:00.000Z",
     "notes": [
@@ -213,6 +242,7 @@
     "company": "Ferretería El Puente",
     "role": "Propietario",
     "status": "activo",
+    "nextStep": null,
     "createdAt": "2026-03-08T14:10:00.000Z",
     "updatedAt": "2026-07-30T18:00:00.000Z",
     "notes": [

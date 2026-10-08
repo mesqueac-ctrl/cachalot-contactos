@@ -12,6 +12,7 @@ function contact(name: string, company = ''): Contact {
     role: '',
     status: 'nuevo',
     notes: [],
+    nextStep: null,
     createdAt: '',
     updatedAt: '',
   }

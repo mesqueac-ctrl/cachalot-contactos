@@ -20,3 +20,6 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: () => false,
   }),
 })
+
+// jsdom tampoco implementa scrollTo (la app vuelve arriba al cambiar de vista).
+window.scrollTo = () => {}

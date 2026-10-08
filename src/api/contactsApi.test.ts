@@ -49,6 +49,37 @@ describe('API simulada', () => {
     expect(contact.notes.map((n) => n.body)).toEqual(['Segunda'])
   })
 
+  it('agenda, reemplaza y borra el próximo paso; al registrar una nota puede agendar otro', async () => {
+    const { api } = setup()
+    const { id, nextStep } = await api.create(input())
+    expect(nextStep).toBeNull()
+
+    await api.setNextStep(id, { date: '2026-10-20', text: '  Enviar propuesta ' })
+    expect((await api.list())[0].nextStep).toEqual({ date: '2026-10-20', text: 'Enviar propuesta' })
+
+    await api.addNote(id, 'Sin cambios en el paso', 'nota')
+    expect((await api.list())[0].nextStep?.date).toBe('2026-10-20')
+
+    await api.addNote(id, 'Llamé', 'llamada', { date: '2026-10-27', text: 'Cerrar' })
+    expect((await api.list())[0].nextStep).toEqual({ date: '2026-10-27', text: 'Cerrar' })
+
+    await api.setNextStep(id, null)
+    expect((await api.list())[0].nextStep).toBeNull()
+
+    await expect(api.setNextStep(id, { date: 'mañana', text: '' })).rejects.toThrow(
+      'La fecha del próximo paso no es válida.',
+    )
+  })
+
+  it('restaura una nota eliminada', async () => {
+    const { api } = setup()
+    const { id } = await api.create(input())
+    const note = await api.addNote(id, 'Importante', 'reunion')
+    await api.removeNote(id, note.id)
+    await api.restoreNote(id, note)
+    expect((await api.list())[0].notes).toEqual([note])
+  })
+
   it('completa campos que faltan en datos guardados por versiones anteriores', async () => {
     const storage = createMemoryStorage()
     storage.setItem(
@@ -56,7 +87,12 @@ describe('API simulada', () => {
       JSON.stringify([{ id: '1', name: 'Viejo', email: 'v@v.co', notes: [{ id: 'n', body: 'x' }] }]),
     )
     const [contact] = await createContactsApi({ storage, delayMs: 0 }).list()
-    expect(contact).toMatchObject({ role: '', status: 'nuevo', notes: [{ kind: 'nota' }] })
+    expect(contact).toMatchObject({
+      role: '',
+      status: 'nuevo',
+      nextStep: null,
+      notes: [{ kind: 'nota' }],
+    })
   })
 
   it('responde 404 si el contacto no existe', async () => {

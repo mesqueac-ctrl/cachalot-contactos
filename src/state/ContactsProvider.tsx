@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { ContactsApi } from '../api/contactsApi'
-import type { Contact, ContactInput, ContactStatus, NoteKind } from '../types'
+import type { Contact, ContactInput, ContactStatus, NextStep, Note, NoteKind } from '../types'
 import { ContactsContext, type ContactsContextValue, type LoadStatus } from './contactsContext'
 
 interface Props {
@@ -77,11 +77,18 @@ export function ContactsProvider({ api, children }: Props) {
   )
 
   const addNote = useCallback(
-    async (contactId: string, body: string, kind: NoteKind) => {
-      const note = await api.addNote(contactId, body, kind)
+    async (contactId: string, body: string, kind: NoteKind, nextStep?: NextStep | null) => {
+      const note = await api.addNote(contactId, body, kind, nextStep)
       setContacts((current) =>
         current.map((c) =>
-          c.id === contactId ? { ...c, notes: [note, ...c.notes], updatedAt: note.createdAt } : c,
+          c.id === contactId
+            ? {
+                ...c,
+                notes: [note, ...c.notes],
+                ...(nextStep !== undefined && { nextStep }),
+                updatedAt: note.createdAt,
+              }
+            : c,
         ),
       )
       return note
@@ -101,6 +108,28 @@ export function ContactsProvider({ api, children }: Props) {
     [api],
   )
 
+  const restoreNote = useCallback(
+    async (contactId: string, note: Note) => {
+      await api.restoreNote(contactId, note)
+      setContacts((current) =>
+        current.map((c) =>
+          c.id === contactId
+            ? { ...c, notes: [...c.notes.filter((n) => n.id !== note.id), note] }
+            : c,
+        ),
+      )
+    },
+    [api],
+  )
+
+  const setNextStep = useCallback(
+    async (contactId: string, nextStep: NextStep | null) => {
+      await api.setNextStep(contactId, nextStep)
+      setContacts((current) => current.map((c) => (c.id === contactId ? { ...c, nextStep } : c)))
+    },
+    [api],
+  )
+
   const value = useMemo<ContactsContextValue>(
     () => ({
       status,
@@ -113,6 +142,8 @@ export function ContactsProvider({ api, children }: Props) {
       changeStatus,
       addNote,
       removeNote,
+      restoreNote,
+      setNextStep,
     }),
     [
       status,
@@ -125,6 +156,8 @@ export function ContactsProvider({ api, children }: Props) {
       changeStatus,
       addNote,
       removeNote,
+      restoreNote,
+      setNextStep,
     ],
   )
 

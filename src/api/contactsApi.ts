@@ -1,7 +1,7 @@
 import seed from '../data/contacts.json'
-import type { Contact, ContactInput, Note, NoteKind } from '../types'
+import type { Contact, ContactInput, NextStep, Note, NoteKind } from '../types'
 
-export const STORAGE_KEY = 'cachalot.contactos.v2'
+export const STORAGE_KEY = 'cachalot.contactos.v3'
 
 /**
  * Cómo se comporta la API simulada:
@@ -16,8 +16,12 @@ export interface ContactsApi {
   create(input: ContactInput): Promise<Contact>
   update(id: string, input: ContactInput): Promise<Contact>
   remove(id: string): Promise<void>
-  addNote(contactId: string, body: string, kind: NoteKind): Promise<Note>
+  /** Si se pasa `nextStep`, reemplaza el próximo paso del contacto en la misma operación. */
+  addNote(contactId: string, body: string, kind: NoteKind, nextStep?: NextStep | null): Promise<Note>
   removeNote(contactId: string, noteId: string): Promise<void>
+  /** Vuelve a poner una nota eliminada (para "Deshacer"). */
+  restoreNote(contactId: string, note: Note): Promise<void>
+  setNextStep(contactId: string, nextStep: NextStep | null): Promise<void>
 }
 
 export class ApiError extends Error {
@@ -99,6 +103,7 @@ export function createContactsApi({
           id: crypto.randomUUID(),
           ...clean(input),
           notes: [],
+          nextStep: null,
           createdAt: now,
           updatedAt: now,
         }
@@ -127,7 +132,7 @@ export function createContactsApi({
         write(contacts.filter((contact) => contact.id !== id))
       }),
 
-    addNote: (contactId, body, kind) =>
+    addNote: (contactId, body, kind, nextStep) =>
       request(() => {
         const contacts = read()
         const index = findIndex(contacts, contactId)
@@ -136,6 +141,7 @@ export function createContactsApi({
         contacts[index] = {
           ...contacts[index],
           notes: [note, ...contacts[index].notes],
+          ...(nextStep !== undefined && { nextStep: cleanStep(nextStep) }),
           updatedAt: now,
         }
         write(contacts)
@@ -151,7 +157,36 @@ export function createContactsApi({
         contacts[index] = { ...contacts[index], notes: notes.filter((n) => n.id !== noteId) }
         write(contacts)
       }),
+
+    restoreNote: (contactId, note) =>
+      request(() => {
+        const contacts = read()
+        const index = findIndex(contacts, contactId)
+        const notes = contacts[index].notes.filter((n) => n.id !== note.id)
+        contacts[index] = { ...contacts[index], notes: [...notes, note] }
+        write(contacts)
+      }),
+
+    setNextStep: (contactId, nextStep) =>
+      request(() => {
+        const contacts = read()
+        const index = findIndex(contacts, contactId)
+        contacts[index] = {
+          ...contacts[index],
+          nextStep: cleanStep(nextStep),
+          updatedAt: new Date().toISOString(),
+        }
+        write(contacts)
+      }),
   }
+}
+
+function cleanStep(step: NextStep | null): NextStep | null {
+  if (!step) return null
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(step.date)) {
+    throw new ApiError('La fecha del próximo paso no es válida.', 400)
+  }
+  return { date: step.date, text: step.text.trim() }
 }
 
 /** Completa campos que datos guardados por versiones anteriores podrían no tener. */
@@ -160,6 +195,7 @@ function withDefaults(contact: Contact): Contact {
     ...contact,
     role: contact.role ?? '',
     status: contact.status ?? 'nuevo',
+    nextStep: contact.nextStep ?? null,
     notes: (contact.notes ?? []).map((note) => ({ ...note, kind: note.kind ?? 'nota' })),
   }
 }
