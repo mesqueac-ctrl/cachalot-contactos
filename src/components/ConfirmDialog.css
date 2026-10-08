@@ -1,0 +1,52 @@
+.dialog {
+  width: min(440px, calc(100vw - 2rem));
+  margin: auto;
+  padding: 0;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 60px -20px rgb(14 34 51 / 0.45);
+}
+
+.dialog::backdrop {
+  background: rgb(14 34 51 / 0.55);
+}
+
+.dialog[open] {
+  animation: dialog-in 200ms var(--ease-out);
+}
+
+.dialog__body {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.dialog__title {
+  font-size: var(--text-xl);
+  font-weight: 650;
+}
+
+.dialog__text {
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.dialog__text strong {
+  color: var(--ink);
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+}

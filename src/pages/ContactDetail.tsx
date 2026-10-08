@@ -1,20 +1,54 @@
-import { useEffect, useRef } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Avatar } from '../components/Avatar'
+import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ContactNotes } from '../components/ContactNotes'
-import { IconAlert, IconArrowLeft, IconBuilding, IconMail, IconPhone, IconRefresh } from '../components/icons'
+import {
+  IconAlert,
+  IconArrowLeft,
+  IconBuilding,
+  IconMail,
+  IconPencil,
+  IconPhone,
+  IconRefresh,
+  IconTrash,
+} from '../components/icons'
 import { StateMessage } from '../components/StateMessage'
 import { formatDate, formatRelative } from '../lib/dates'
 import { useContacts } from '../state/contactsContext'
+import { useToast } from '../state/toastContext'
 import { NotFoundPane } from './NotFoundPane'
 import './ContactDetail.css'
 import './pages.css'
 
 export function ContactDetail() {
-  const { id } = useParams()
-  const { status, contacts, error, reload } = useContacts()
+  const { id = '' } = useParams()
+  // La key reinicia el estado local (diálogo, foco) al pasar de un contacto a otro.
+  return <ContactDetailView key={id} id={id} />
+}
+
+function ContactDetailView({ id }: { id: string }) {
+  const { status, contacts, error, reload, deleteContact } = useContacts()
+  const notify = useToast()
+  const navigate = useNavigate()
   const contact = contacts.find((c) => c.id === id)
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  async function handleDelete() {
+    if (!contact) return
+    setDeleting(true)
+    try {
+      await deleteContact(contact.id)
+      notify(`Contacto eliminado: ${contact.name}`)
+      navigate('/')
+    } catch (err) {
+      notify(err instanceof Error ? err.message : 'No se pudo eliminar el contacto.', 'error')
+      setDeleting(false)
+      setConfirmOpen(false)
+    }
+  }
 
   // En móvil la lista desaparece al abrir el detalle; el foco debe acompañar al contenido.
   useEffect(() => {
@@ -68,7 +102,36 @@ export function ContactDetail() {
           </h2>
           {contact.company && <p className="detail__company">{contact.company}</p>}
         </div>
+        <div className="detail__actions">
+          <Link to={`/contactos/${contact.id}/editar`} className="btn btn--secondary">
+            <IconPencil size={16} />
+            Editar
+          </Link>
+          <button
+            type="button"
+            className="btn btn--danger-quiet"
+            onClick={() => setConfirmOpen(true)}
+          >
+            <IconTrash size={16} />
+            Eliminar
+          </button>
+        </div>
       </header>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="¿Eliminar este contacto?"
+        confirmLabel="Eliminar contacto"
+        busyLabel="Eliminando…"
+        busy={deleting}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmOpen(false)}
+      >
+        Se borrará <strong>{contact.name}</strong>
+        {contact.notes.length === 1 && ' junto con su nota'}
+        {contact.notes.length > 1 && ` junto con sus ${contact.notes.length} notas`}. Esta acción no
+        se puede deshacer.
+      </ConfirmDialog>
 
       <dl className="facts">
         <div className="fact">
