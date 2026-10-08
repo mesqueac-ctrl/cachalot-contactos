@@ -54,7 +54,7 @@
   }
 }
 
-.kpi[data-tone='amber'] { --kpi: #d48a1c; --kpi-soft: var(--amber-soft); }
+.kpi[data-tone='amber'] { --kpi: #a9650a; --kpi-soft: var(--amber-soft); }
 .kpi[data-tone='blue'] { --kpi: var(--accent); --kpi-soft: var(--accent-soft); }
 .kpi[data-tone='violet'] { --kpi: #6a4cc2; --kpi-soft: #efeafb; }
 .kpi[data-tone='green'] { --kpi: var(--success); --kpi-soft: var(--success-soft); }

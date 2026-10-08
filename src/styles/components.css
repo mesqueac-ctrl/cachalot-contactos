@@ -69,12 +69,12 @@
   font-size: 1.75rem;
 }
 
-.avatar[data-tone='0'] { --tone-bg: linear-gradient(135deg, #6a97f2, #2c5bd6); }
-.avatar[data-tone='1'] { --tone-bg: linear-gradient(135deg, #f2bd6a, #cf8215); }
-.avatar[data-tone='2'] { --tone-bg: linear-gradient(135deg, #a88aea, #6a4cc2); }
-.avatar[data-tone='3'] { --tone-bg: linear-gradient(135deg, #f29a84, #cc5238); }
-.avatar[data-tone='4'] { --tone-bg: linear-gradient(135deg, #78cf95, #2c8549); }
-.avatar[data-tone='5'] { --tone-bg: linear-gradient(135deg, #8c9bb3, #4a5973); }
+.avatar[data-tone='0'] { --tone-bg: linear-gradient(135deg, #3d6ad6, #2149b3); }
+.avatar[data-tone='1'] { --tone-bg: linear-gradient(135deg, #a9650a, #8a5208); }
+.avatar[data-tone='2'] { --tone-bg: linear-gradient(135deg, #8a5fd0, #5a3eb0); }
+.avatar[data-tone='3'] { --tone-bg: linear-gradient(135deg, #c24a32, #a33a25); }
+.avatar[data-tone='4'] { --tone-bg: linear-gradient(135deg, #2a7d44, #1f6636); }
+.avatar[data-tone='5'] { --tone-bg: linear-gradient(135deg, #5f6e86, #4a5973); }
 
 .avatar__dot {
   position: absolute;

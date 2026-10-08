@@ -273,7 +273,7 @@ mark {
 
 .input::placeholder {
   color: var(--ink-muted);
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .input:hover {
