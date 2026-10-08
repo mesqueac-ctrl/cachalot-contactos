@@ -1,6 +1,7 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { createBrowserApi } from './api/contactsApi'
 import { AppLayout } from './components/AppLayout'
+import { ContactDetail } from './pages/ContactDetail'
 import { NotFoundPane } from './pages/NotFoundPane'
 import { WelcomePane } from './pages/WelcomePane'
 import { ContactsProvider } from './state/ContactsProvider'
@@ -12,6 +13,7 @@ export function AppRoutes() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route index element={<WelcomePane />} />
+        <Route path="contactos/:id" element={<ContactDetail />} />
         <Route path="*" element={<NotFoundPane />} />
       </Route>
     </Routes>
